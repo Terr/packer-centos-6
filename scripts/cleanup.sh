@@ -20,12 +20,13 @@ rm -f /var/lib/dhclient/dhclient-eth0.leases
 
 rm -rf /tmp/*
 
+# Ensure SELinux is disabled
+sed -i'' 's/^\(SELINUX=\).*/\1disabled/g' /etc/sysconfig/selinux
+sed -i'' 's/^\(SELINUX=\).*/\1disabled/g' /etc/selinux/config
+
 # Zero out the rest of the free space using dd, then delete the written file.
 dd if=/dev/zero of=/EMPTY bs=1M
 rm -f /EMPTY
-
-# Ensure SELinux is disabled
-sed -i "s/^\(SELINUX=\).*/\1disabled/g" /etc/sysconfig/selinux
 
 # Add `sync` so Packer doesn't quit too early, before the large file is deleted.
 sync
